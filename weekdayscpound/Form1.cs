@@ -11,8 +11,6 @@ namespace weekdayscpound
 
         private Label[] days;
 
-        private static readonly int[] DaysInMonthList = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
         private void Form1_Load(object sender, EventArgs e)
         {
             //default to current
@@ -22,15 +20,17 @@ namespace weekdayscpound
 
             //organize labels for output
             days = [lbl1st, lbl2nd, lbl3rd, lbl4th];
+
+            //run first date
+            LoadDays(sender, e);
         }
 
         private void LoadDays(object sender, EventArgs e)
         {
             int first = FirstDOTW(dudMonth.SelectedIndex+1, (int)nudYear.Value, dudDOTW.SelectedIndex);
-            lbl1st.Text = first.ToString();
-            lbl2nd.Text = (first+7).ToString();
-            lbl3rd.Text = (first+14).ToString();
-            lbl4th.Text = (first+21).ToString();
+            if (days is null) return;
+            for (int i = 0; i < days.Length; i++)
+                days[i].Text = (first + (7*i)).ToString();
         }
         
         private static int FirstDOTW(int month, int year, int dotw)
@@ -50,8 +50,8 @@ namespace weekdayscpound
 
 
             //second algorithm
-            
-            //fix for starting the windows form
+
+            //fix for starting the windows form to avoid an index error
             if (month == 0) return 1;
             
             int[] t = { 0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 };
